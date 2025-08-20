@@ -169,6 +169,9 @@ docker-compose.override.yml
 .local/
 local/
 
+# Documentation (not tracked in git)
+GIT_COLLABORATION_GUIDE.md
+
 # PM2 process files
 .pm2/
 
