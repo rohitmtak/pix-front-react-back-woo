@@ -60,3 +60,6 @@ jspm_packages/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Windows specific - prevent nul file creation
+nul

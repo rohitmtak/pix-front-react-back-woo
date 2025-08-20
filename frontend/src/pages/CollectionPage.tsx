@@ -3,61 +3,77 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductGrid from "@/components/ProductGrid";
 import GridLayoutToggle from "@/components/GridLayoutToggle";
+import { Loading } from "@/components/ui/loading";
+import { Error } from "@/components/ui/error";
+import { useProducts } from "@/hooks/useProducts";
+import { useCategories } from "@/hooks/useCategories";
 import { cn } from "@/lib/utils";
-
-// Mock product data based on the design
-const mockProducts = [
-  {
-    id: "1",
-    imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/6714f073aacab712b21f60fbf4e61031c285fc0d?width=841",
-    title: "Camilla",
-    price: "₹120000",
-    category: "Signature Collection",
-    alt: "Signature Collection Product 1",
-    isWishlisted: false
-  },
-  {
-    id: "2",
-    imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/0efc5ea89a5ee8e0294affd324731a2314beb84b?width=841",
-    title: "Amethyst",
-    price: "₹120000",
-    category: "Signature Collection",
-    alt: "Signature Collection Product 2",
-    isWishlisted: false
-  },
-  {
-    id: "3",
-    imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/bdbf39600435e40a6f9b6e8648985bdc886f117b?width=841",
-    title: "Irisa",
-    price: "₹120000",
-    category: "Signature Collection",
-    alt: "Signature Collection Product 3",
-    isWishlisted: true
-  },
-  {
-    id: "4",
-    imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/70502f0f5e1eb5199d05b1e35468e1ad7c937629?width=841",
-    title: "Grace",
-    price: "₹120000",
-    category: "Signature Collection",
-    alt: "Signature Collection Product 4",
-    isWishlisted: true
-  }
-];
 
 const CollectionPage = () => {
   const [gridLayout, setGridLayout] = useState(4);
-  const [products, setProducts] = useState(mockProducts);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<number | undefined>();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Fetch products from API
+  const {
+    data: productsResponse,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useProducts({
+    page: currentPage,
+    per_page: 20,
+    category: selectedCategory,
+    search: searchQuery || undefined,
+  });
+
+  // Fetch categories for filtering
+  const { data: categoriesResponse } = useCategories();
+
+  const products = productsResponse?.data || [];
+  const totalPages = productsResponse?.totalPages || 1;
+  const categories = categoriesResponse?.data || [];
 
   const handleWishlistToggle = (productId: string, isWishlisted: boolean) => {
-    setProducts(prev =>
-      prev.map(product =>
-        product.id === productId
-          ? { ...product, isWishlisted }
-          : product
-      )
-    );
+    // TODO: Implement wishlist API call
+    console.log(`Product ${productId} wishlist toggled to ${isWishlisted}`);
   };
+
+  const handleCategoryChange = (categoryId: number | undefined) => {
+    setSelectedCategory(categoryId);
+    setCurrentPage(1); // Reset to first page when category changes
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (isError) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <main className="pt-36">
+          <div className="container mx-auto px-16 py-16">
+            <Error
+              title="Error Loading Products"
+              message={error?.message || "Failed to load products. Please try again."}
+              onRetry={() => refetch()}
+              retryText="Retry"
+            />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -81,38 +97,43 @@ const CollectionPage = () => {
           </h1>
         </div>
 
-        {/* Horizontal Line */}
-        {/* <div className="px-16 pb-4">
-          <svg
-            width="1800"
-            height="1"
-            viewBox="0 0 1800 1"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full"
-          >
-            <path d="M0 1L1800 1" stroke="black" strokeWidth="2" />
-          </svg>
-        </div> */}
-
-        {/* Filter and Layout Controls */}
+        {/* Search and Filter Controls */}
         <div className="px-16 pb-8">
-          <div
-            className="flex justify-between items-center"
-          >
-            {/* Filter Label */}
-            <div>
-              <span
-                className="text-black text-center font-normal uppercase"
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  lineHeight: '20px',
-                  color: 'rgba(0,0,0,1)'
-                }}
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            {/* Search and Filters */}
+            <div className="flex flex-col sm:flex-row gap-4 flex-1">
+              {/* Search Input */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => handleSearch("")}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Category Filter */}
+              <select
+                value={selectedCategory || ""}
+                onChange={(e) => handleCategoryChange(e.target.value ? Number(e.target.value) : undefined)}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
               >
-                FILTER
-              </span>
+                <option value="">All Categories</option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Grid Layout Toggle */}
@@ -123,14 +144,118 @@ const CollectionPage = () => {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="px-16 pb-16">
+            <Loading size="lg" text="Loading products..." className="py-16" />
+          </div>
+        )}
+
         {/* Products Grid */}
-        <div className="px-16 pb-16">
-          <ProductGrid
-            products={products}
-            columns={gridLayout}
-            onWishlistToggle={handleWishlistToggle}
-          />
-        </div>
+        {!isLoading && products.length > 0 && (
+          <div className="px-16 pb-16">
+            <ProductGrid
+              products={products.map(product => ({
+                id: product.id.toString(),
+                imageUrl: product.images[0]?.src || "/placeholder-image.jpg",
+                title: product.name,
+                price: `₹${product.price}`,
+                category: product.categories[0]?.name || "Uncategorized",
+                alt: product.images[0]?.alt || product.name,
+                isWishlisted: false // TODO: Get from wishlist API
+              }))}
+              columns={gridLayout}
+              onWishlistToggle={handleWishlistToggle}
+            />
+          </div>
+        )}
+
+        {/* No Products Found */}
+        {!isLoading && products.length === 0 && (
+          <div className="px-16 pb-16">
+            <div className="text-center py-16">
+              <p className="text-gray-600 text-lg">
+                {searchQuery || selectedCategory 
+                  ? "No products found matching your criteria." 
+                  : "No products available at the moment."}
+              </p>
+              {(searchQuery || selectedCategory) && (
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory(undefined);
+                  }}
+                  className="mt-4 px-6 py-2 text-black border border-black rounded hover:bg-black hover:text-white transition-colors"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {!isLoading && totalPages > 1 && (
+          <div className="px-16 pb-16">
+            <div className="flex justify-center items-center gap-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={cn(
+                  "px-4 py-2 rounded border transition-colors",
+                  currentPage === 1
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 text-gray-700 hover:border-black hover:text-black"
+                )}
+              >
+                Previous
+              </button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={cn(
+                        "px-3 py-2 rounded border transition-colors",
+                        currentPage === pageNum
+                          ? "border-black bg-black text-white"
+                          : "border-gray-300 text-gray-700 hover:border-black hover:text-black"
+                      )}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+              
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={cn(
+                  "px-4 py-2 rounded border transition-colors",
+                  currentPage === totalPages
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 text-gray-700 hover:border-black hover:text-black"
+                )}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Footer */}

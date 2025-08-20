@@ -5,8 +5,16 @@ const config = require('./config/config');
 const app = express();
 const PORT = config.server.port;
 
+// CORS configuration
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
 // Middleware
-app.use(cors(config.cors));
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Import routes
@@ -26,4 +34,5 @@ app.use('/api/categories', categoriesRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/api/health`);
+  console.log('CORS enabled for:', corsOptions.origin);
 });
