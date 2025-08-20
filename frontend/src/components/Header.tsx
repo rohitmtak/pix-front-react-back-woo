@@ -1,20 +1,29 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import SideMenu from "./SideMenu";
 
-interface HeaderProps {
-  transparent?: boolean;
-}
-
-const Header = ({ transparent = false }: HeaderProps) => {
+const Header = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isCollectionHovered, setIsCollectionHovered] = useState(false);
   const [isNavigationVisible, setIsNavigationVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if we're on the home page
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+
+      // Check if scrolled past 100px for background change
+      if (currentScrollY > 40) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
 
       // Show navigation when scrolling up, hide when scrolling down
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -43,11 +52,17 @@ const Header = ({ transparent = false }: HeaderProps) => {
     setIsSideMenuOpen(false);
   };
 
+  const handleNavigation = (path: string) => {
+    // Scroll to top before navigation
+    window.scrollTo(0, 0);
+    navigate(path);
+  };
+
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-50 w-full ${transparent ? 'bg-transparent' : 'bg-white'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
         {/* Top Section - Logo and Icons */}
-        <div className={`px-16 py-6`}> {/* ${transparent ? '' : 'border-b border-gray-200'} */}
+        <div className={`px-16 py-6`}>
           <div className="flex items-center justify-between w-full max-w-screen-2xl mx-auto">
             {/* Hamburger Menu Button */}
             <button
@@ -71,13 +86,27 @@ const Header = ({ transparent = false }: HeaderProps) => {
             </button>
 
             {/* Logo */}
-            <div className="absolute left-1/2 transform -translate-x-1/2">
+            <div className={`transition-all duration-500 ease-in-out ${
+              isHomePage 
+                ? 'fixed left-1/2 transform -translate-x-1/2 z-[60]' 
+                : 'absolute left-1/2 transform -translate-x-1/2'
+            }`} style={isHomePage ? {
+              top: isScrolled ? '24px' : '50%',
+              transform: isScrolled ? 'translate(-50%, 0)' : 'translate(-50%, -50%)'
+            } : {}}>
               <Link to="/">
                 <img
                   src="/images/pix-black-logo.png"
                   alt="Highstreet Pix Logo"
-                  className="w-16 h-16 object-contain"
-                  style={{
+                  className={`object-contain transition-all duration-500 ease-in-out ${
+                    isHomePage && !isScrolled 
+                      ? 'w-[350px] h-[350px]' 
+                      : 'w-16 h-16'
+                  }`}
+                  style={isHomePage && !isScrolled ? {
+                    width: "350px",
+                    height: "350px",
+                  } : {
                     width: "55px",
                     height: "55px",
                   }}
@@ -145,10 +174,13 @@ const Header = ({ transparent = false }: HeaderProps) => {
 
         {/* Navigation Section - Below Logo (Collapsible) */}
         <div
-          className={`px-16 py-4 pt-0 ${transparent ? 'bg-transparent' : 'bg-white'} transition-all duration-300 ease-in-out ${isNavigationVisible
-              ? 'max-h-20 opacity-100'
-              : 'max-h-0 opacity-0 py-0'
-            }`}
+          className={`px-16 transition-all duration-500 ease-in-out ${
+            isHomePage && !isScrolled 
+              ? 'max-h-0 opacity-0 py-0 overflow-hidden' 
+              : isNavigationVisible
+                ? 'max-h-20 opacity-100 py-4 pt-0'
+                : 'max-h-0 opacity-0 py-0 overflow-hidden'
+          }`}
         >
           <div className="flex justify-center items-center space-x-12 max-w-screen-2xl mx-auto">
             {/* Home */}
@@ -176,30 +208,30 @@ const Header = ({ transparent = false }: HeaderProps) => {
               <div
                 className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg py-2 min-w-[200px] z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto"
               >
-                <Link
-                  to="/collection?category=signature"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                <button
+                  onClick={() => handleNavigation("/collection?category=signature")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Signature Collection
-                </Link>
-                <Link
-                  to="/collection?category=bridal"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                </button>
+                <button
+                  onClick={() => handleNavigation("/collection?category=bridal")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Bridal Couture
-                </Link>
-                <Link
-                  to="/collection?category=contemporary"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                </button>
+                <button
+                  onClick={() => handleNavigation("/collection?category=contemporary")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Contemporary Drapes
-                </Link>
-                <Link
-                  to="/collection?category=luxury"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                </button>
+                <button
+                  onClick={() => handleNavigation("/collection?category=luxury")}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Luxury Fusion Lounge
-                </Link>
+                </button>
               </div>
             </div>
 

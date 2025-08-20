@@ -8,7 +8,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <Header transparent={true} />
+      <Header />
 
       {/* Hero Section */}
       <HeroSection />
