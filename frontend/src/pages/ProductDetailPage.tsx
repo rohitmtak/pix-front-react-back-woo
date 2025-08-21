@@ -72,8 +72,8 @@ const ProductDetailPage = () => {
     return (
       <div className="min-h-screen bg-white">
         <Header />
-        <main className="pt-36">
-          <div className="container mx-auto px-16 py-16">
+        <main className="pt-24">
+          <div className="container mx-auto px-0 py-16">
             <Loading size="lg" text="Loading product..." className="py-16" />
           </div>
         </main>
@@ -87,8 +87,8 @@ const ProductDetailPage = () => {
     return (
       <div className="min-h-screen bg-white">
         <Header />
-        <main className="pt-36">
-          <div className="container mx-auto px-16 py-16">
+        <main className="pt-24">
+          <div className="container mx-auto px-0 py-16">
             <Error
               title={isError ? "Error Loading Product" : "Product not found"}
               message={isError 
@@ -196,8 +196,8 @@ const ProductDetailPage = () => {
       <Header />
 
       {/* Main Content */}
-      <main className="pt-36">
-        <div className="container mx-auto px-16 py-16">
+      <main className="pt-24">
+        <div className="container mx-auto px-0 py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
             {/* Product Gallery */}
@@ -225,14 +225,14 @@ const ProductDetailPage = () => {
                 )}
                 
                 {/* Wishlist Button */}
-                <div className="absolute top-4 right-4">
+                {/* <div className="absolute top-4 right-4">
                   <WishlistButton
                     productId={product.id.toString()}
                     isWishlisted={isWishlisted}
                     onToggle={handleWishlistToggle}
                     className="bg-white/80 backdrop-blur-sm p-2 rounded-full hover:bg-white/90"
                   />
-                </div>
+                </div> */}
               </div>
 
               {/* Thumbnail Gallery */}
@@ -268,7 +268,7 @@ const ProductDetailPage = () => {
                   <h1 
                     className="text-black font-normal uppercase text-2xl flex-1 min-w-0"
                     style={{
-                      fontFamily: 'Jost, -apple-system, Roboto, Jost, sans-serif',
+                      fontFamily: 'Bodoni Moda, -apple-system, Roboto, Bodoni Moda, sans-serif',
                       fontWeight: 400,
                       lineHeight: '32px',
                       color: 'rgba(0,0,0,1)'
@@ -369,7 +369,7 @@ const ProductDetailPage = () => {
                           onClick={() => handleSizeSelection(size)}
                           disabled={!isAvailable}
                           className={cn(
-                            "w-12 h-12 rounded-full border-2 transition-all duration-300 ease-in-out text-sm font-medium flex items-center justify-center",
+                            "w-10 h-10 rounded-full border-2 transition-all duration-300 ease-in-out text-sm font-medium flex items-center justify-center",
                             selectedSize === size
                               ? "border-black bg-black text-white"
                               : "border-gray-300 hover:border-gray-400 text-gray-700",
@@ -472,7 +472,7 @@ const ProductDetailPage = () => {
               <div className="mt-8 flex gap-4">
                 <Button 
                   className="w-full text-sm font-normal bg-black text-white hover:bg-gray-800"
-                  disabled={!selectedSize || !selectedColor}
+                  // disabled={!selectedSize || !selectedColor}
                 >
                   ADD TO CART
                 </Button>
@@ -480,7 +480,7 @@ const ProductDetailPage = () => {
                   variant="outline" 
                   className="w-full text-sm font-normal border-2 border-black text-black hover:bg-gray-50"
                 >
-                  BUY NOW
+                  ENQUIRE
                 </Button>
               </div>
 

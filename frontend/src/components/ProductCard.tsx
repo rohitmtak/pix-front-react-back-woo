@@ -28,7 +28,7 @@ const ProductCard = ({
   onWishlistToggle
 }: ProductCardProps) => {
   return (
-    <div className={cn("flex flex-col gap-8", className)}>
+    <div className={cn("flex flex-col gap-4", className)}>
       {/* Product Image Container */}
       <div className="relative w-full group">
         <Link to={`/product/${id}`} className="block w-full">
@@ -40,9 +40,9 @@ const ProductCard = ({
             />
           </div>
         </Link>
-        
+
         {/* Wishlist Button */}
-        {showWishlist && (
+        {/* {showWishlist && (
           <div className="absolute top-2.5 right-2.5">
             <WishlistButton
               productId={id}
@@ -51,21 +51,32 @@ const ProductCard = ({
               className="bg-white/80 backdrop-blur-sm p-1.5 rounded-full hover:bg-white/90"
             />
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Product Info */}
-      <div className="text-left">
+      <div className="text-left relative">
+        {showWishlist && (
+          <div className="absolute top-0 right-0">
+            <WishlistButton
+              productId={id}
+              isWishlisted={isWishlisted}
+              onToggle={onWishlistToggle}
+              className="bg-white/80 backdrop-blur-sm rounded-full hover:bg-white/90"  // p-1.5
+            />
+          </div>
+        )}
+
         {/* Category */}
         {category && (
           <span className="text-gray-600 font-jost text-sm uppercase tracking-wide block">
             {category}
           </span>
         )}
-        
+
         {/* Title */}
         <h3 className="text-black text-xl">
-          <span style={{ 
+          <span style={{
             fontFamily: 'Jost, -apple-system, Roboto, Jost, sans-serif',
             fontWeight: 500,
             fontSize: '16px',
@@ -74,10 +85,10 @@ const ProductCard = ({
             {title}
           </span>
         </h3>
-        
+
         {/* Price */}
         <p className="text-black font-normal text-xl">
-          <span style={{ 
+          <span style={{
             fontFamily: 'Jost, -apple-system, Roboto, Jost, sans-serif',
             fontWeight: 400,
             fontSize: '16px',

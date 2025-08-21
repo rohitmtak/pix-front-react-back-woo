@@ -24,6 +24,10 @@ export default {
         'jost-light': ['Jost', 'sans-serif'],
         'jost-medium': ['Jost', 'sans-serif'],
         'jost-bold': ['Jost', 'sans-serif'],
+        'bodoni': ['Bodoni Moda', 'serif'],
+        'bodoni-light': ['Bodoni Moda', 'serif'],
+        'bodoni-medium': ['Bodoni Moda', 'serif'],
+        'bodoni-bold': ['Bodoni Moda', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",

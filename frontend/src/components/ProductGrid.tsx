@@ -41,7 +41,7 @@ const ProductGrid = ({
     <div className={cn("w-full", className)}>
       <div 
         className={cn(
-          "grid gap-3 w-full",
+          "grid gap-6 w-full",
           getGridCols()
         )}
         // style={{ 
@@ -56,7 +56,7 @@ const ProductGrid = ({
             imageUrl={product.imageUrl}
             title={product.title}
             price={product.price}
-            category={product.category}
+            // category={product.category}
             alt={product.alt}
             isWishlisted={product.isWishlisted}
             onWishlistToggle={onWishlistToggle}

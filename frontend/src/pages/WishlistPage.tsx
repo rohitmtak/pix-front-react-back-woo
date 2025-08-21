@@ -10,7 +10,7 @@ const mockWishlistProducts = [
   {
     id: "3",
     imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/bdbf39600435e40a6f9b6e8648985bdc886f117b?width=841",
-    title: "SIGNATURE Collection",
+    title: "MARGOT",
     price: "120000/-",
     category: "Signature Collection",
     alt: "Signature Collection Product 3",
@@ -19,7 +19,7 @@ const mockWishlistProducts = [
   {
     id: "4",
     imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/70502f0f5e1eb5199d05b1e35468e1ad7c937629?width=841",
-    title: "SIGNATURE Collection",
+    title: "AMETHYST",
     price: "120000/-",
     category: "Signature Collection",
     alt: "Signature Collection Product 4",
@@ -159,6 +159,7 @@ const WishlistPage = () => {
                   imageUrl={product.imageUrl}
                   title={product.title}
                   price={product.price}
+                  category={product.category}
                   alt={product.alt}
                   isWishlisted={product.isWishlisted}
                   onWishlistToggle={handleWishlistToggle}
