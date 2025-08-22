@@ -311,7 +311,7 @@ const ProductDetailPage = () => {
               </div>
 
               {/* Description */}
-              {product.short_description && (
+              {/* {product.short_description && (
                 <div>
                   <p 
                     className="text-gray-700"
@@ -324,7 +324,7 @@ const ProductDetailPage = () => {
                     {product.short_description}
                   </p>
                 </div>
-              )}
+              )} */}
 
               {/* Size Selection */}
               {sizes.length > 0 && (

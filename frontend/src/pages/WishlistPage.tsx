@@ -170,7 +170,7 @@ const WishlistPage = () => {
           )}
 
           {/* Recommended Products Section */}
-          {wishlistProducts.length > 0 && (
+          {/* {wishlistProducts.length > 0 && (
             <div className="mt-24 pt-16 border-t border-gray-200">
               <div className="text-center mb-12">
                 <h2 
@@ -196,7 +196,7 @@ const WishlistPage = () => {
                 </Button>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </main>
 

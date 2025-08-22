@@ -42,7 +42,7 @@ const ProductGrid = ({
       <div 
         className={cn(
           "flex flex-wrap w-full",
-          "transition-all duration-500 ease-in-out"
+          "transition-all duration-1000 ease-in-out"
         )}
         style={{ gap: getLayoutConfig().gap }}
       >
@@ -51,7 +51,7 @@ const ProductGrid = ({
             key={product.id}
             className={cn(
               getLayoutConfig().width,
-              "transition-all duration-500 ease-in-out"
+              "transition-all duration-1000 ease-in-out"
             )}
           >
             <ProductCard

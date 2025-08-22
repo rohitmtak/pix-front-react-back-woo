@@ -55,7 +55,7 @@ const ProductCard = ({
       </div>
 
       {/* Product Info */}
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start pb-8 px-1.5">
         {/* Left side - Product details */}
         <div className="flex-1">
           {/* Category */}
