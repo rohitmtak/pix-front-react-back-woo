@@ -24,16 +24,16 @@ const ProductGrid = ({
   className,
   onWishlistToggle 
 }: ProductGridProps) => {
-  const getGridCols = () => {
+  const getLayoutConfig = () => {
     switch (columns) {
       case 2:
-        return "grid-cols-2";
+        return { width: "w-[49%]", gap: "2%" }; // 2 columns with 2% gap
       case 3:
-        return "grid-cols-3";
+        return { width: "w-[32%]", gap: "1.5%" }; // 3 columns with 1.5% gap
       case 4:
-        return "grid-cols-4";
+        return { width: "w-[24%]", gap: "1%" }; // 4 columns with 1% gap
       default:
-        return "grid-cols-4";
+        return { width: "w-[24%]", gap: "1%" }; // Default to 4 columns
     }
   };
 
@@ -41,27 +41,31 @@ const ProductGrid = ({
     <div className={cn("w-full", className)}>
       <div 
         className={cn(
-          "grid gap-6 w-full",
-          getGridCols()
+          "flex flex-wrap w-full",
+          "transition-all duration-500 ease-in-out"
         )}
-        // style={{ 
-        //   width: '1792px',
-        //   height: '629px'
-        // }}
+        style={{ gap: getLayoutConfig().gap }}
       >
         {products.map((product) => (
-          <ProductCard
+          <div 
             key={product.id}
-            id={product.id}
-            imageUrl={product.imageUrl}
-            title={product.title}
-            price={product.price}
-            // category={product.category}
-            alt={product.alt}
-            isWishlisted={product.isWishlisted}
-            onWishlistToggle={onWishlistToggle}
-            className="h-full"
-          />
+            className={cn(
+              getLayoutConfig().width,
+              "transition-all duration-500 ease-in-out"
+            )}
+          >
+            <ProductCard
+              id={product.id}
+              imageUrl={product.imageUrl}
+              title={product.title}
+              price={product.price}
+              // category={product.category}
+              alt={product.alt}
+              isWishlisted={product.isWishlisted}
+              onWishlistToggle={onWishlistToggle}
+              className="h-full"
+            />
+          </div>
         ))}
       </div>
     </div>
