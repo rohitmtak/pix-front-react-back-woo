@@ -14,5 +14,5 @@ export const config = {
 export const env = {
   isDevelopment: import.meta.env.DEV,
   isProduction: import.meta.env.PROD,
-  apiBaseUrl: import.meta.env.DEV ? '/api' : config.api.baseUrl,
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '/api' : 'http://localhost:5000/api'),
 } as const;
