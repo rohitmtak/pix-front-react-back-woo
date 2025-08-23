@@ -35,3 +35,6 @@ frontend/public/videos/
 # Cache
 .cache/
 .eslintcache
+
+# Local Netlify folder
+.netlify
