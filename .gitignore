@@ -26,12 +26,6 @@ Thumbs.db
 .idea/
 *.swp
 
-# Video files (large media)
-frontend/public/videos/
-*.mp4
-*.avi
-*.mov
-
 # Cache
 .cache/
 .eslintcache
