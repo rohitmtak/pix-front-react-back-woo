@@ -1,7 +1,9 @@
 # Dependencies
 node_modules/
 */node_modules/
-.env/
+
+# Environment variables (keep examples, ignore real ones)
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -14,15 +16,6 @@ dist/
 build/
 dist-ssr/
 *.local
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.backend
-.env.frontend
 
 # Logs
 logs
@@ -80,7 +73,6 @@ jspm_packages/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/
@@ -114,18 +106,8 @@ temp/
 ehthumbs.db
 Thumbs.db
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# Database (keep for demo, but ignore large ones)
 *.db-journal
-
-# Node.js specific
-.npm
-.eslintcache
-.node_repl_history
-*.tgz
-.yarn-integrity
 
 # WooCommerce specific
 uploads/
@@ -135,7 +117,6 @@ wp-content/backup-db/
 wp-content/backups/
 wp-content/blogs.dir/
 wp-content/upgrade/
-wp-content/uploads/
 wp-content/plugins/hello.php
 
 # Large media files
@@ -169,9 +150,6 @@ docker-compose.override.yml
 .local/
 local/
 
-# Documentation (not tracked in git)
-GIT_COLLABORATION_GUIDE.md
-
 # PM2 process files
 .pm2/
 
@@ -180,7 +158,6 @@ nodemon.json
 
 # Jest
 jest.config.js
-coverage/
 
 # TypeScript
 *.tsbuildinfo
