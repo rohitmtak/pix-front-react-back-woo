@@ -8,8 +8,7 @@
     "test": "vitest --run",
     "format.fix": "prettier --write .",
     "typecheck": "tsc",
-    "dev:server": "nodemon server.js",
-    "postinstall": "npm install --legacy-peer-deps"
+    "dev:server": "nodemon server.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
