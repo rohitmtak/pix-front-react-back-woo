@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 const HeroSection = () => {
   return (
     <section className="relative w-full h-screen overflow-hidden">
@@ -6,9 +8,11 @@ const HeroSection = () => {
         autoPlay
         loop
         playsInline
+        muted
+        preload="metadata"
       >
+        <source src="/videos/intro2.webm" type="video/webm" />
         <source src="/videos/intro2.mp4" type="video/mp4" />
-        <source src="/path-to-your-video.webm" type="video/webm" />
         Your browser does not support the video tag.
       </video>
       

@@ -8,6 +8,7 @@ const Header = () => {
   const [isNavigationVisible, setIsNavigationVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -58,63 +59,212 @@ const Header = () => {
     navigate(path);
   };
 
+  // Determine header background based on page and state
+  const getHeaderBackground = () => {
+    if (isHomePage) {
+      // On home page: transparent by default, white on hover only
+      if (isHeaderHovered) {
+        return 'bg-white shadow';
+      }
+      return 'bg-transparent';
+    } else {
+      // On other pages: always white
+      return 'bg-white shadow';
+    }
+  };
+
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
-        {/* Top Section - Logo and Icons */}
-        <div className={`px-16 py-6`}>
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out ${getHeaderBackground()}`}
+        onMouseEnter={() => setIsHeaderHovered(true)}
+        onMouseLeave={() => setIsHeaderHovered(false)}
+      >
+        {/* Main Navbar */}
+        <div className={`px-16 py-8 relative`}>
           <div className="flex items-center justify-between w-full max-w-screen-2xl mx-auto">
-            {/* Hamburger Menu Button */}
-            <button
-              onClick={toggleSideMenu}
-              className="flex items-center justify-center"
-              aria-label="Open menu"
-            >
-              <svg
-                width="34"
-                height="28"
-                viewBox="0 0 34 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4 fill-black"
+            {/* Left - Navigation Links */}
+            <div className="flex items-center space-x-12">
+              {/* Home */}
+              <Link
+                to="/"
+                className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity"
               >
-                <path
-                  d="M1.43514 0.000123538C1.24764 -0.00219144 1.06148 0.0280497 0.887479 0.0890897C0.713481 0.15013 0.555114 0.240751 0.421582 0.355687C0.28805 0.470624 0.182016 0.607582 0.109643 0.758605C0.0372697 0.909627 0 1.0717 0 1.23541C0 1.39911 0.0372697 1.56119 0.109643 1.71221C0.182016 1.86323 0.28805 2.00019 0.421582 2.11513C0.555114 2.23006 0.713481 2.32068 0.887479 2.38172C1.06148 2.44276 1.24764 2.473 1.43514 2.47069H32.5649C32.7524 2.473 32.9385 2.44276 33.1125 2.38172C33.2865 2.32068 33.4449 2.23006 33.5784 2.11513C33.7119 2.00019 33.818 1.86323 33.8904 1.71221C33.9627 1.56119 34 1.39911 34 1.23541C34 1.0717 33.9627 0.909627 33.8904 0.758605C33.818 0.607582 33.7119 0.470624 33.5784 0.355687C33.4449 0.240751 33.2865 0.15013 33.1125 0.0890897C32.9385 0.0280497 32.7524 -0.00219144 32.5649 0.000123538H1.43514ZM1.43514 13.1765C1.24764 13.1742 1.06148 13.2044 0.887479 13.2654C0.713481 13.3265 0.555114 13.4171 0.421582 13.532C0.28805 13.647 0.182016 13.7839 0.109643 13.935C0.0372697 14.086 0 14.2481 0 14.4118C0 14.5755 0.0372697 14.7375 0.109643 14.8886C0.182016 15.0396 0.28805 15.1765 0.421582 15.2915C0.555114 15.4064 0.713481 15.497 0.887479 15.5581C1.06148 15.6191 1.24764 15.6494 1.43514 15.647H32.5649C32.7524 15.6494 32.9385 15.6191 33.1125 15.5581C33.2865 15.497 33.4449 15.4064 33.5784 15.2915C33.7119 15.1765 33.818 15.0396 33.8904 14.8886C33.9627 14.7375 34 14.5755 34 14.4118C34 14.2481 33.9627 14.086 33.8904 13.935C33.818 13.7839 33.7119 13.647 33.5784 13.532C33.4449 13.4171 33.2865 13.3265 33.1125 13.2654C32.9385 13.2044 32.7524 13.1742 32.5649 13.1765H1.43514ZM1.43514 25.5293C1.24764 25.527 1.06148 25.5572 0.887479 25.6183C0.713481 25.6793 0.555114 25.7699 0.421582 25.8849C0.28805 25.9998 0.182016 26.1368 0.109643 26.2878C0.0372697 26.4388 0 26.6009 0 26.7646C0 26.9283 0.0372697 27.0904 0.109643 27.2414C0.182016 27.3924 0.28805 27.5294 0.421582 27.6443C0.555114 27.7592 0.713481 27.8499 0.887479 27.9109C1.06148 27.9719 1.24764 28.0022 1.43514 27.9999H32.5649C32.7524 28.0022 32.9385 27.9719 33.1125 27.9109C33.2865 27.8499 33.4449 27.7592 33.5784 27.6443C33.7119 27.5294 33.818 27.3924 33.8904 27.2414C33.9627 27.0904 34 26.9283 34 26.7646C34 26.6009 33.9627 26.4388 33.8904 26.2878C33.818 26.1368 33.7119 25.9998 33.5784 25.8849C33.4449 25.7699 33.2865 25.6793 33.1125 25.6183C32.9385 25.5572 32.7524 25.527 32.5649 25.5293H1.43514Z"
-                  fill="black"
-                />
-              </svg>
-            </button>
+                Home
+              </Link>
 
-            {/* Logo */}
-            <div className={`transition-all duration-500 ease-in-out ${
-              isHomePage 
-                ? 'fixed left-1/2 transform -translate-x-1/2 z-[60]' 
-                : 'absolute left-1/2 transform -translate-x-1/2'
-            }`} style={isHomePage ? {
-              top: isScrolled ? '24px' : '50%',
-              transform: isScrolled ? 'translate(-50%, 0)' : 'translate(-50%, -50%)'
-            } : {}}>
-              <Link to="/">
-                <img
-                  src="/images/pix-black-logo.png"
-                  alt="Highstreet Pix Logo"
-                  className={`object-contain transition-all duration-500 ease-in-out ${
-                    isHomePage && !isScrolled 
-                      ? 'w-[350px] h-[350px]' 
-                      : 'w-16 h-16'
-                  }`}
-                  style={isHomePage && !isScrolled ? {
-                    width: "350px",
-                    height: "350px",
-                  } : {
-                    width: "55px",
-                    height: "55px",
-                  }}
-                />
+              {/* Our Collection - with Dropdown */}
+              <div
+                className="group"
+                onMouseEnter={() => setIsCollectionHovered(true)}
+                onMouseLeave={() => setIsCollectionHovered(false)}
+              >
+                <button className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity relative after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:w-32 after:h-10 after:bg-transparent after:hidden group-hover:after:block">
+                  Collection
+                </button>
+
+                {/* Category Cards Row - Full width with images */}
+                <div
+                  className="absolute top-full left-1/2 -translate-x-1/2 w-screen bg-white border-t border-gray-100 shadow-2xl py-12 z-[70] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0"
+                >
+                  <div className="max-w-screen-2xl mx-auto px-16">
+                    <div className="flex">
+                      {/* Left Side - Category Names */}
+                      <div className="w-2/5">
+                        <div className="space-y-6">
+                          {/* Signature Collection */}
+                          <div className="group/item opacity-0 -translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-1000 ease-out group-hover:delay-0">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=signature")}
+                              className="text-left"
+                            >
+                              <div className="text-xl text-black group-hover/item:text-gray-700 transition-colors duration-300">
+                                Signature Collection
+                              </div>
+                            </button>
+                          </div>
+
+                          {/* Bridal Couture */}
+                          <div className="group/item opacity-0 -translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-1000 ease-out group-hover:delay-100">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=bridal")}
+                              className="text-left"
+                            >
+                              <div className="text-xl text-black group-hover/item:text-gray-700 transition-colors duration-300">
+                                Bridal Couture
+                              </div>
+                            </button>
+                          </div>
+
+                          {/* Contemporary Drapes */}
+                          <div className="group/item opacity-0 -translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-1000 ease-out group-hover:delay-200">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=contemporary")}
+                              className="text-left"
+                            >
+                              <div className="text-xl text-black group-hover/item:text-gray-700 transition-colors duration-300">
+                                Contemporary Drapes
+                              </div>
+                            </button>
+                          </div>
+
+                          {/* Luxury Fusion Lounge */}
+                          <div className="group/item opacity-0 -translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-1000 ease-out group-hover:delay-300">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=luxury")}
+                              className="text-left"
+                            >
+                              <div className="text-xl text-black group-hover/item:text-gray-700 transition-colors duration-300">
+                                Luxury Fusion Lounge
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right Side - Category Images */}
+                      <div className="w-3/5">
+                        <div className="grid grid-cols-4 gap-4">
+                          {/* Signature Collection Image */}
+                          <div className="group/item">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=signature")}
+                              className="w-full"
+                            >
+                              <div className="aspect-[4/5] overflow-hidden">
+                                <img 
+                                  src="/images/img9.png" 
+                                  alt="Signature Collection"
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                  onError={(e) => {
+                                    e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='128' viewBox='0 0 192 128'%3E%3Crect width='192' height='128' fill='%23fdf2f8'/%3E%3Ctext x='96' y='64' text-anchor='middle' dy='.3em' font-family='Arial' font-size='12' fill='%23be185d'%3ESignature%3C/text%3E%3C/svg%3E";
+                                  }}
+                                />
+                              </div>
+                            </button>
+                          </div>
+
+                          {/* Bridal Couture Image */}
+                          <div className="group/item">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=bridal")}
+                              className="w-full"
+                            >
+                              <div className="aspect-[4/5] overflow-hidden">
+                                <img 
+                                  src="/images/img7.png" 
+                                  alt="Bridal Couture"
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                  onError={(e) => {
+                                    e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='128' viewBox='0 0 192 128'%3E%3Crect width='192' height='128' fill='%23faf5ff'/%3E%3Ctext x='96' y='64' text-anchor='middle' dy='.3em' font-family='Arial' font-size='12' fill='%237c3aed'%3EBridal%3C/text%3E%3C/svg%3E";
+                                  }}
+                                />
+                              </div>
+                            </button>
+                          </div>
+
+                          {/* Contemporary Drapes Image */}
+                          <div className="group/item">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=contemporary")}
+                              className="w-full"
+                            >
+                              <div className="aspect-[4/5] overflow-hidden">
+                                <img 
+                                  src="/images/img5.webp" 
+                                  alt="Contemporary Drapes"
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                  onError={(e) => {
+                                    e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='128' viewBox='0 0 192 128'%3E%3Crect width='192' height='128' fill='%23eff6ff'/%3E%3Ctext x='96' y='64' text-anchor='middle' dy='.3em' font-family='Arial' font-size='12' fill='%232563eb'%3EContemporary%3C/text%3E%3C/svg%3E";
+                                  }}
+                                />
+                              </div>
+                            </button>
+                          </div>
+
+                          {/* Luxury Fusion Lounge Image */}
+                          <div className="group/item">
+                            <button
+                              onClick={() => handleNavigation("/collection?category=luxury")}
+                              className="w-full"
+                            >
+                              <div className="aspect-[4/5] overflow-hidden">
+                                <img 
+                                  src="/images/img8.png" 
+                                  alt="Luxury Fusion Lounge"
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                  onError={(e) => {
+                                    e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='128' viewBox='0 0 192 128'%3E%3Crect width='192' height='128' fill='%23fffbeb'/%3E%3Ctext x='96' y='64' text-anchor='middle' dy='.3em' font-family='Arial' font-size='12' fill='%23d97706'%3ELuxury%3C/text%3E%3C/svg%3E";
+                                  }}
+                                />
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* About */}
+              <Link
+                to="/about"
+                className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity"
+              >
+                About
+              </Link>
+
+              {/* Contact */}
+              <Link
+                to="/contact"
+                className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity"
+              >
+                Contact
               </Link>
             </div>
 
-            {/* Right Navigation Icons */}
+            {/* Right - Navigation Icons */}
             <div className="flex items-center space-x-4">
               {/* Wishlist */}
               <Link
@@ -145,8 +295,6 @@ const Header = () => {
                   width="31"
                   height="31"
                   viewBox="0 0 31 31"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4 fill-black"
                 >
                   <path
@@ -162,96 +310,57 @@ const Header = () => {
                 className="flex items-center justify-center"
                 aria-label="Shopping cart"
               >
+                <svg 
+                  width="20" 
+                  height="17" 
+                  viewBox="0 0 19 23" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="fill-black"
+                  role="presentation"
+                >
+                  <path d="M0 22.985V5.995L2 6v.03l17-.014v16.968H0zm17-15H2v13h15v-13zm-5-2.882c0-2.04-.493-3.203-2.5-3.203-2 0-2.5 1.164-2.5 3.203v.912H5V4.647C5 1.19 7.274 0 9.5 0 11.517 0 14 1.354 14 4.647v1.368h-2v-.912z" fill="currentColor"></path>
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* Center - Logo (Absolutely positioned for perfect centering) */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            <div className="pointer-events-auto">
+              <Link to="/">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7d0064c1ee02ed48ecc890168ab5dc4171b820d4?width=88"
-                  alt="Shopping Cart"
-                  className="w-[21px] h-14 object-contain"
+                  src="/images/pix-black-logo.png"
+                  alt="Highstreet Pix Logo"
+                  className="w-16 h-16 object-contain"
                 />
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Navigation Section - Below Logo (Collapsible) */}
-        <div
-          className={`px-16 transition-all duration-500 ease-in-out ${
-            isHomePage && !isScrolled 
-              ? 'max-h-0 opacity-0 py-0 overflow-hidden' 
-              : isNavigationVisible
-                ? 'max-h-20 opacity-100 py-4 pt-0'
-                : 'max-h-0 opacity-0 py-0 overflow-hidden'
-          }`}
+        {/* Commented out Hamburger Menu Button */}
+        {/* <button
+          onClick={toggleSideMenu}
+          className="flex items-center justify-center"
+          aria-label="Open menu"
         >
-          <div className="flex justify-center items-center space-x-12 max-w-screen-2xl mx-auto">
-            {/* Home */}
-            <Link
-              to="/"
-              className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity"
-            >
-              Home
-            </Link>
+          <svg
+            width="34"
+            height="28"
+            viewBox="0 0 34 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-4 h-4 fill-black"
+          >
+            <path
+              d="M1.43514 0.000123538C1.24764 -0.00219144 1.06148 0.0280497 0.887479 0.0890897C0.713481 0.15013 0.555114 0.240751 0.421582 0.355687C0.28805 0.470624 0.182016 0.607582 0.109643 0.758605C0.0372697 0.909627 0 1.0717 0 1.23541C0 1.39911 0.0372697 1.56119 0.109643 1.71221C0.182016 1.86323 0.28805 2.00019 0.421582 2.11513C0.555114 2.23006 0.713481 2.32068 0.887479 2.38172C1.06148 2.44276 1.24764 2.473 1.43514 2.47069H32.5649C32.7524 2.473 32.9385 2.44276 33.1125 2.38172C33.2865 2.32068 33.4449 2.23006 33.5784 2.11513C33.7119 2.00019 33.818 1.86323 33.8904 1.71221C33.9627 1.56119 34 1.39911 34 1.23541C34 1.0717 33.9627 0.909627 33.8904 0.758605C33.818 0.607582 33.7119 0.470624 33.5784 0.355687C33.4449 0.240751 33.2865 0.15013 33.1125 0.0890897C32.9385 0.0280497 32.7524 -0.00219144 32.5649 0.000123538H1.43514ZM1.43514 13.1765C1.24764 13.1742 1.06148 13.2044 0.887479 13.2654C0.713481 13.3265 0.555114 13.4171 0.421582 13.532C0.28805 13.647 0.182016 13.7839 0.109643 13.935C0.0372697 14.086 0 14.2481 0 14.4118C0 14.5755 0.0372697 14.7375 0.109643 14.8886C0.182016 15.0396 0.28805 15.1765 0.421582 15.2915C0.555114 15.4064 0.713481 15.497 0.887479 15.5581C1.06148 15.6191 1.24764 15.6494 1.43514 15.647H32.5649C32.7524 15.6494 32.9385 15.6191 33.1125 15.5581C33.2865 15.497 33.4449 15.4064 33.5784 15.2915C33.7119 15.1765 33.818 15.0396 33.8904 14.8886C33.9627 14.7375 34 14.5755 34 14.4118C34 14.2481 33.9627 14.086 33.8904 13.935C33.818 13.7839 33.7119 13.647 33.5784 13.532C33.4449 13.4171 33.2865 13.3265 33.1125 13.2654C32.9385 13.2044 32.7524 13.1742 32.5649 13.1765H1.43514ZM1.43514 25.5293C1.24764 25.527 1.06148 25.5572 0.887479 25.6183C0.713481 25.6793 0.555114 25.7699 0.421582 25.8849C0.28805 25.9998 0.182016 26.1368 0.109643 26.2878C0.0372697 26.4388 0 26.6009 0 26.7646C0 26.9283 0.0372697 27.0904 0.109643 27.2414C0.182016 27.3924 0.28805 27.5294 0.421582 27.6443C0.555114 27.7592 0.713481 27.8499 0.887479 27.9109C1.06148 27.9719 1.24764 28.0022 1.43514 27.9999H32.5649C32.7524 28.0022 32.9385 27.9719 33.1125 27.9109C33.2865 27.8499 33.4449 27.7592 33.5784 27.6443C33.7119 27.5294 33.818 27.3924 33.8904 27.2414C33.9627 27.0904 34 26.9283 34 26.7646C34 26.6009 33.9627 26.4388 33.8904 26.2878C33.818 26.1368 33.7119 25.9998 33.5784 25.8849C33.4449 25.7699 33.2865 25.6793 33.1125 25.6183C32.9385 25.5572 32.7524 25.527 32.5649 25.5293H1.43514Z"
+              fill="black"
+            />
+          </svg>
+        </button> */}
 
-            {/* Our Collection - with Dropdown */}
-            <div
-              className="relative group"
-              onMouseEnter={() => setIsCollectionHovered(true)}
-              onMouseLeave={() => setIsCollectionHovered(false)}
-            >
-              <button className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity">
-                Our Collection
-              </button>
-
-              {/* Invisible bridge area to maintain hover connection */}
-              <div className="absolute top-full left-0 w-full h-2 bg-transparent"></div>
-
-              {/* Dropdown Menu - Now with proper spacing */}
-              <div
-                className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg py-2 min-w-[200px] z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto"
-              >
-                <button
-                  onClick={() => handleNavigation("/collection?category=signature")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  Signature Collection
-                </button>
-                <button
-                  onClick={() => handleNavigation("/collection?category=bridal")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  Bridal Couture
-                </button>
-                <button
-                  onClick={() => handleNavigation("/collection?category=contemporary")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  Contemporary Drapes
-                </button>
-                <button
-                  onClick={() => handleNavigation("/collection?category=luxury")}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  Luxury Fusion Lounge
-                </button>
-              </div>
-            </div>
-
-            {/* About */}
-            <Link
-              to="/about"
-              className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity"
-            >
-              About
-            </Link>
-
-            {/* Contact */}
-            <Link
-              to="/contact"
-              className="text-black font-jost text-sm uppercase tracking-wide hover:opacity-70 transition-opacity"
-            >
-              Contact
-            </Link>
-          </div>
-        </div>
+        {/* Removed the separate Navigation Section - now integrated above */}
       </header>
 
       {/* Side Menu */}

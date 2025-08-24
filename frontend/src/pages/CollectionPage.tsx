@@ -60,7 +60,7 @@ const CollectionPage = () => {
     return (
       <div className="min-h-screen bg-white">
         <Header />
-        <main className="pt-36">
+        <main className="pt-24">
           <div className="container mx-auto px-16 py-16">
             <Error
               title="Error Loading Products"
@@ -81,7 +81,7 @@ const CollectionPage = () => {
       <Header />
 
       {/* Main Content */}
-      <main className="pt-36">
+      <main className="pt-24">
         {/* Page Title */}
         <div className="flex justify-center pt-8 pb-6">
           <h1
@@ -103,7 +103,7 @@ const CollectionPage = () => {
             {/* Search and Filters */}
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
               {/* Search Input */}
-              <div className="relative">
+              {/* <div className="relative">
                 <input
                   type="text"
                   placeholder="Search products..."
@@ -119,10 +119,10 @@ const CollectionPage = () => {
                     ✕
                   </button>
                 )}
-              </div>
+              </div> */}
 
               {/* Category Filter */}
-              <select
+              {/* <select
                 value={selectedCategory || ""}
                 onChange={(e) => handleCategoryChange(e.target.value ? Number(e.target.value) : undefined)}
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
@@ -133,7 +133,7 @@ const CollectionPage = () => {
                     {category.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
 
             {/* Grid Layout Toggle */}
@@ -160,7 +160,7 @@ const CollectionPage = () => {
                 imageUrl: product.images[0]?.src || "/placeholder-image.jpg",
                 title: product.name,
                 price: `₹${product.price}`,
-                category: product.categories[0]?.name || "Uncategorized",
+                // category: product.categories[0]?.name || "Uncategorized",
                 alt: product.images[0]?.alt || product.name,
                 isWishlisted: false // TODO: Get from wishlist API
               }))}
